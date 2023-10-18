@@ -2,39 +2,11 @@ import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import Cards from "@/components/Cards";
-export default function page() {
-  const items = [
-    {
-      id: 1,
-      name: "Pasta",
-      imageUrl: "/food.jpg",
-      price: 200,
-    },
-    {
-      id: 2,
-      name: "Burger",
-      imageUrl: "/food.jpg",
-      price: 250,
-    },
-    {
-      id: 3,
-      name: "Pizza",
-      imageUrl: "/food.jpg",
-      price: 300,
-    },
-    {
-      id: 4,
-      name: "Biryani",
-      imageUrl: "/food.jpg",
-      price: 280,
-    },
-    {
-      id: 5,
-      name: "Chicken roast",
-      imageUrl: "/food.jpg",
-      price: 420,
-    },
-  ];
+import dbConnect from "@/config/dbConnect";
+import Pizza from "@/model/Pizza";
+export default async function page() {
+  await dbConnect();
+  const items = await Pizza.find({}).limit(6);
   return (
     <>
       <section className="p-3">
@@ -47,13 +19,13 @@ export default function page() {
             <div className="flex gap-4 items-center max-sm:flex-col max-sm:justify-center">
               <Link
                 href="/menu"
-                className="bg-red-500 px-6 py-3 hover:bg-red-600 text-white rounded-full transition-colors"
+                className="bg-red-600 px-7 py-3 hover:bg-red-500 hover:border-red-500 text-white rounded-full transition-colors border-red-500 border-2"
               >
                 View Menu
               </Link>
               <Link
                 href="/menu"
-                className="px-6 py-3 rounded-full transition-colors border-gray-400 border-2 bg-transparent hover:border-gray-500"
+                className="px-7 py-3 rounded-full transition-colors border-gray-400 border-2 bg-transparent hover:border-gray-500"
               >
                 Book a Seat
               </Link>
@@ -64,7 +36,7 @@ export default function page() {
               src="/food.jpg"
               alt="Image of Chicken Biryani as the banner"
               quality={80}
-              className="w-full"
+              className="w-full rounded-md"
               width={200}
               height={200}
             />

@@ -1,11 +1,10 @@
-import React from "react";
 import SingleCard from "./SingleCard";
 
 export default function Cards({ items }) {
   return (
-    <div className="flex flex-wrap gap-4 max-sm:justify-center">
+    <div className="flex max-sm:justify-center w-full gap-4 flex-wrap justify-between max-sm:gap-2">
       {items.map((item) => (
-        <SingleCard data={item} key={item.id} />
+        <SingleCard data={item} key={item._id} />
       ))}
     </div>
   );
