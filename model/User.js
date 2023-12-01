@@ -26,10 +26,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: function () {
-        return !!this.email;
-      },
-      minlength: [8, "Password must be at least 8 characters long"],
       select: false,
     },
     googleId: {
@@ -45,6 +41,11 @@ const userSchema = new mongoose.Schema(
     reset: {
       token: { type: String, select: false },
       expiry: { type: Date, select: false },
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
     },
   },
   { timestamps: true }
@@ -66,6 +67,6 @@ userSchema.index(
   { unique: true, partialFilterExpression: { googleID: { $type: "string" } } }
 );
 
-const User = model.models.users || mongoose.model("users", userSchema);
+const User = mongoose.models.users || mongoose.model("users", userSchema);
 
 module.exports = User;

@@ -1,8 +1,9 @@
 "use client";
-import { addItem, removeItem } from "@/store/cartSlice";
+import { addItem, removeItem, updateItemSize } from "@/store/cartSlice";
 import { Add, Remove } from "@mui/icons-material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 export default function FoodItem({ data }) {
   const dispatch = useDispatch();
@@ -16,11 +17,30 @@ export default function FoodItem({ data }) {
         alt="menu item"
       />
       <div className="flex-1">
-        <h3>{data.name}</h3>
-        <p className="text-gray-800">
+        <Link href={`/product/${data?.slug}`}>
+          <h3>{data.name}</h3>
+        </Link>
+        <p className="text-gray-800 my-2">
           {data.description.slice(0, 50).toString()}
           {data.description.length > 50 && "..."}
         </p>
+        <div>
+          <label htmlFor="size">Size: </label>
+          <select
+            id="size"
+            className="border border-gray-400 p-1 rounded-md cursor-pointer focus:border-red-500"
+            onChange={(e) =>
+              dispatch(updateItemSize({ size: e.target.value, id: data._id }))
+            }
+            value={data?.selectedSize}
+          >
+            {data?.sizes.map((availableSize) => (
+              <option value={availableSize} key={availableSize}>
+                {availableSize}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="flex flex-col items-center">
         <span className="text-xl">${data.price}</span>

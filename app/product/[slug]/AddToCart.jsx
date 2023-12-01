@@ -3,7 +3,7 @@ import { addItem } from "@/store/cartSlice";
 import { AddShoppingCart } from "@mui/icons-material";
 import Link from "next/link";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function AddToCart({ product }) {
   product = JSON.parse(product);
@@ -34,7 +34,7 @@ export default function AddToCart({ product }) {
         <button
           className="bg-red-500 px-6 py-2 rounded-full text-white flex items-center justify-center gap-2"
           onClick={() => {
-            dispatch(addItem({ ...product }));
+            dispatch(addItem({ ...product, selectedSize: size }));
           }}
         >
           Add to cart <AddShoppingCart />

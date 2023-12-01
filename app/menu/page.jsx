@@ -4,6 +4,7 @@ import Cards from "@/components/Cards";
 import dbConnect from "@/config/dbConnect";
 import Pizza from "../../model/Pizza";
 
+export const dynamic = true;
 export default async function page({ searchParams }) {
   const products = await getProducts(searchParams);
   return (

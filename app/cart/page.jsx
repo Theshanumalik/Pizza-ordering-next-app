@@ -36,7 +36,7 @@ export default function page() {
         <div className="flex justify-between gap-5 max-md:flex-col">
           <div style={{ flex: 6 }}>
             {state.map((item) => (
-              <FoodItem data={item} />
+              <FoodItem data={item} key={item?._id} />
             ))}
           </div>
           <div style={{ flex: 4 }}>
@@ -56,7 +56,7 @@ export default function page() {
                   <span className="text-gray-900">${total + shipping}</span>
                 </li>
               </ul>
-              <button className="bg-gray-800 text-white block w-full p-3 rounded-md uppercase mt-2 hover:bg-gray-900 transition-colors">
+              <button className="bg-red-500 text-white block w-full p-3 rounded-md uppercase mt-2 hover:bg-red-600 transition-colors">
                 Checkout
               </button>
             </div>

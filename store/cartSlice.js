@@ -30,8 +30,17 @@ export const cartSlice = createSlice({
         }
       }
     },
+    updateItemSize: (state, action) => {
+      const index = state.findIndex((item) => item._id === action.payload.id);
+      if (index >= 0) {
+        state[index] = {
+          ...state[index],
+          selectedSize: action.payload.size,
+        };
+      }
+    },
   },
 });
 
-export const { addItem, removeItem } = cartSlice.actions;
+export const { addItem, removeItem, updateItemSize } = cartSlice.actions;
 export default cartSlice.reducer;
