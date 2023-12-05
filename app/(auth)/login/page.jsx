@@ -3,8 +3,11 @@ import Link from "next/link";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const loginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("cannot be empty"),
     password: Yup.string().min(5, "too short").required("cannot be empty"),
@@ -19,19 +22,26 @@ export default function LoginPage() {
         }}
         validationSchema={loginSchema}
         onSubmit={async (values) => {
-          try {
-            const res = await signIn("credentials", {
+          const promise = new Promise((resolve, reject) => {
+            signIn("credentials", {
               email: values.email,
               password: values.password,
               redirect: false,
+            }).then((res) => {
+              if (res?.error) {
+                return reject(res.error);
+              }
+              resolve();
+              window.location.href = searchParams.get("callbackUrl") || "/";
             });
-            if (res?.error) {
-              return console.log(res.error);
-            }
-            window.location.href = "/";
-          } catch (error) {
-            console.log("error: ", error);
-          }
+          });
+          toast.promise(promise, {
+            error: (err) => `${err}`,
+            success: `Logged in successfully, redirecting to ${
+              searchParams.get("callbackUrl") || "/"
+            }`,
+            loading: "Logging in, please wait...",
+          });
         }}
       >
         {({ errors, touched }) => (
@@ -76,7 +86,9 @@ export default function LoginPage() {
               type="button"
               className="border border-red-500 p-2 px-6 rounded-full"
               onClick={() => {
-                signIn("google", { callbackUrl: "http://localhost:3000" });
+                signIn("google", {
+                  callbackUrl: searchParams.get("callbackUrl") || "/",
+                });
               }}
             >
               Sign in with Google

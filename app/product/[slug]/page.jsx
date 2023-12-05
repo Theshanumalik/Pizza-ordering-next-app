@@ -20,7 +20,7 @@ export default async function ProductPage({ params }) {
             width={200}
             height={200}
             quality={100}
-            className="w-full"
+            className="w-full rounded-md"
           />
         </aside>
         <aside className="flex-1 p-4 max-sm:px-0">

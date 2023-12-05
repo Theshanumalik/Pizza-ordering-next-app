@@ -4,8 +4,11 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams();
   const registerSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, "too short")
@@ -24,17 +27,36 @@ export default function RegisterPage() {
           password: "",
         }}
         validationSchema={registerSchema}
-        onSubmit={async (values) => {
-          const res = await axios.post("/api/register", values);
-          if (res.status === 200) {
-            signIn("credentials", {
-              email: values.email,
-              password: values.password,
-            });
-          }
+        onSubmit={(values, props) => {
+          const promise = new Promise((resolve, reject) => {
+            props.setSubmitting(true);
+            axios
+              .post("/api/register", values)
+              .then((res) => {
+                if (res.status === 200) {
+                  resolve();
+                  signIn("credentials", {
+                    email: values.email,
+                    password: values.password,
+                    redirect: true,
+                    callbackUrl: searchParams.get("callbackUrl") || "/",
+                  });
+                } else {
+                  reject();
+                }
+              })
+              .catch((err) => reject(err.response.data))
+              .finally(() => props.setSubmitting(false));
+          });
+
+          toast.promise(promise, {
+            error: (err) => `${err}`,
+            success: "Registration successfull, logging in..",
+            loading: "Validating information, please wait..",
+          });
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, isSubmitting, isValid }) => (
           <Form className="flex flex-col gap-2 p-2">
             <label htmlFor="name" className="text-gray-700 text-sm">
               Enter Name
@@ -76,7 +98,8 @@ export default function RegisterPage() {
             </span>
             <button
               type="submit"
-              className="bg-red-500 p-2 px-6 text-white rounded-full mt-2 active:bg-red-400 transition-colors"
+              className="bg-red-500 p-2 px-6 text-white rounded-full mt-2 active:bg-red-400 transition-colors disabled:cursor-not-allowed disabled:bg-red-300"
+              disabled={isSubmitting || !isValid}
             >
               Register
             </button>

@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function FoodItem({ data }) {
   const dispatch = useDispatch();
   return (
-    <div className="flex items-center justify-between shadow-md mb-2 p-4 rounded-lg bg-white max-[488px]:flex-col max-[488px]:text-center max-[488px]:gap-2">
+    <div className="flex items-center justify-between shadow-md border mb-2 p-4 rounded-lg bg-white max-[488px]:flex-col max-[488px]:text-center max-[488px]:gap-2">
       <Image
         src={data.imageUrl}
         width={100}

@@ -1,4 +1,3 @@
-import React from "react";
 import Navigation from "./Navigation";
 import Cards from "@/components/Cards";
 import dbConnect from "@/config/dbConnect";
@@ -23,11 +22,9 @@ async function getProducts(searchParams) {
     searchQuery.category = searchParams?.filter;
   }
   try {
-    console.log({ [searchParams?.sort]: -1 });
     await dbConnect();
     return await Pizza.find(searchQuery).sort({ [searchParams?.sort]: -1 });
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
