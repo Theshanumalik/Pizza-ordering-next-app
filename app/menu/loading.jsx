@@ -1,4 +1,4 @@
-import CardSkeleton from "@/components/CardSkeleton";
+import CardSkeleton from "@/components/skeletons/CardSkeleton";
 import React from "react";
 
 function loading() {
