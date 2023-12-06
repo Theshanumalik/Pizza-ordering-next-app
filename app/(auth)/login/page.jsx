@@ -21,19 +21,22 @@ export default function LoginPage() {
           password: "",
         }}
         validationSchema={loginSchema}
-        onSubmit={async (values) => {
+        onSubmit={(values, props) => {
           const promise = new Promise((resolve, reject) => {
+            props.setSubmitting(true);
             signIn("credentials", {
               email: values.email,
               password: values.password,
               redirect: false,
-            }).then((res) => {
-              if (res?.error) {
-                return reject(res.error);
-              }
-              resolve();
-              window.location.href = searchParams.get("callbackUrl") || "/";
-            });
+            })
+              .then((res) => {
+                if (res?.error) {
+                  return reject(res.error);
+                }
+                resolve();
+                window.location.href = searchParams.get("callbackUrl") || "/";
+              })
+              .finally(() => props.setSubmitting(false));
           });
           toast.promise(promise, {
             error: (err) => `${err}`,
@@ -44,7 +47,7 @@ export default function LoginPage() {
           });
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, isValid, isSubmitting }) => (
           <Form className="flex flex-col gap-2 p-2">
             <label htmlFor="email" className="text-gray-700 text-sm">
               Enter email
@@ -73,7 +76,8 @@ export default function LoginPage() {
             </span>
             <button
               type="submit"
-              className="bg-red-500 p-2 px-6 w-full text-white rounded-full mt-2 active:bg-red-400 transition-colors"
+              className="bg-red-500 p-2 px-6 w-full text-white rounded-full mt-2 active:bg-red-400 transition-colors disabled:bg-red-300 disabled:cursor-not-allowed"
+              disabled={isSubmitting || !isValid}
             >
               Login
             </button>

@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 export default function AddToCartButton({ data }) {
   const dispatch = useDispatch();
   const handleClick = () => {
-    dispatch(addItem(JSON.parse(data)));
+    const itemData = JSON.parse(data);
+    dispatch(addItem({ ...itemData, selectedSize: itemData.sizes[0] }));
     toast.success("Pizza added to the cart!");
   };
   return (

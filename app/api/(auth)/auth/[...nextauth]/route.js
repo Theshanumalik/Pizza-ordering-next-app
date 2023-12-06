@@ -33,14 +33,14 @@ export const authOptions = {
           await dbConnect();
           const user = await User.findOne({ email }).select("+password");
           if (!user) {
-            return { error: "No user found" };
+            return { error: "Invalid Email or Password" };
           }
           if (!user.password) {
-            return { error: "Invalid Email Or Password" };
+            return { error: "Invalid Email or Password" };
           }
           const isValid = await bcrypt.compare(password, user.password);
           if (!isValid) {
-            return { error: "Invalid password" };
+            return { error: "Invalid Email or Password" };
           }
           return { ...user._doc, password: undefined, id: user._id };
         } catch (error) {

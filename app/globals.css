@@ -11,3 +11,14 @@ body {
 * {
   box-sizing: border-box;
 }
+.__animate-skeleton {
+  animation: skeleton-animation 1s alternate infinite forwards ease-in-out;
+}
+@keyframes skeleton-animation {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}

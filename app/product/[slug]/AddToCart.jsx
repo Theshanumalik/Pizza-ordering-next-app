@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 export default function AddToCart({ product }) {
   product = JSON.parse(product);
   const dispatch = useDispatch();
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState(product?.sizes[0]);
   const handleClick = () => {
     dispatch(addItem({ ...product, selectedSize: size }));
     toast.success("Pizza added to the cart!");

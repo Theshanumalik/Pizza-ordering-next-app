@@ -6,6 +6,7 @@ import Offer from "@/components/Offer";
 import StoreProvider from "@/store/StoreProvider";
 import AuthProvider from "@/context/AuthProvider";
 import ToastContainer from "@/components/ToastContainer";
+import { ProfileProvider } from "@/context/ProfileProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,13 +20,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <StoreProvider>
-            <ToastContainer />
-            <Offer />
-            <Navbar />
-            {children}
-            <Footer />
-          </StoreProvider>
+          <ProfileProvider>
+            <StoreProvider>
+              <ToastContainer />
+              <Offer />
+              <Navbar />
+              {children}
+              <Footer />
+            </StoreProvider>
+          </ProfileProvider>
         </AuthProvider>
       </body>
     </html>
