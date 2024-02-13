@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const extrasSchema = new mongoose.Schema({
+  name: String,
+  extraPrice: Number,
+});
+
 const pizzaSchema = new mongoose.Schema(
   {
     name: {
@@ -19,8 +24,11 @@ const pizzaSchema = new mongoose.Schema(
       required: [true, "Pizza price is required"],
     },
     sizes: {
-      type: [String],
+      type: [extrasSchema],
       required: [true, "Pizza sizes are required"],
+    },
+    addOns: {
+      type: [extrasSchema],
     },
     image: {
       type: String,
@@ -28,7 +36,7 @@ const pizzaSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["regular", "veg", "non-veg"],
+      enum: ["regular", "veg", "non veg"],
       required: [true, "Pizza category is required"],
     },
   },

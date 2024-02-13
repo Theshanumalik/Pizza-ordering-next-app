@@ -1,5 +1,5 @@
 import Navigation from "./Navigation";
-import Cards from "@/components/Cards";
+import Cards from "@/components/menu/Cards";
 import dbConnect from "@/config/dbConnect";
 import Pizza from "../../model/Pizza";
 

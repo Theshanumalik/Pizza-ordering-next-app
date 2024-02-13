@@ -8,12 +8,14 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
+import { CurrencyRupee } from "@mui/icons-material";
+import { useProfile } from "@/context/ProfileProvider";
 
-export default function Checkout() {
-  const { data, status } = useSession();
+export default function Checkout({ amount }) {
+  const { status } = useSession();
+  const { data, loading } = useProfile();
   const pathname = usePathname();
   const state = useSelector((state) => state.cart);
-  const [total, setTotal] = React.useState(0);
   const validationSchema = Yup.object().shape({
     phoneNumber: Yup.number("Phone number should be a Number")
       .positive()
@@ -25,24 +27,19 @@ export default function Checkout() {
       .required("Street address cannot be empty")
       .min(10, "too short!"),
   });
-  React.useEffect(() => {
-    let total = 0;
-    state.forEach((item) => {
-      total += item.price * item.qty;
-    });
-    setTotal(total);
-  }, [state]);
+  console.log(data);
 
-  if (status === "unauthenticated")
+  if (status === "unauthenticated" || loading)
     return (
       <div className="bg-gray-200 px-4 rounded-md py-3">
         <h3 className="my-3 text-gray-900 uppercase font-semibold">Checkout</h3>
         <p>Please Login with your account. to procceed checkout.</p>
         <Link
-          className="bg-red-600 text-center text-white block w-full p-3 rounded-md uppercase mt-2 hover:bg-red-500 transition-colors"
+          className="bg-red-600 text-white w-full p-3 rounded-md uppercase mt-2 hover:bg-red-500 transition-colors flex items-center justify-center"
           href={`/login?callbackUrl=${pathname}`}
         >
-          Pay ${total}
+          Pay <CurrencyRupee />
+          {amount}
         </Link>
       </div>
     );
@@ -51,9 +48,9 @@ export default function Checkout() {
       <h3 className="my-3 text-gray-900 uppercase font-semibold">Checkout</h3>
       <Formik
         initialValues={{
-          phoneNumber: "",
-          city: "",
-          streetAddress: "",
+          phoneNumber: data.phoneNumber || "",
+          city: data.city || "",
+          streetAddress: data.streetAddress || "",
         }}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
@@ -130,10 +127,11 @@ export default function Checkout() {
                 : null}
             </span>
             <button
-              className="bg-red-600 text-white block w-full p-3 rounded-md uppercase mt-2 hover:bg-red-500 transition-colors"
+              className="bg-red-600 text-white w-full p-3 rounded-md uppercase mt-2 hover:bg-red-500 transition-colors flex items-center justify-center"
               type="submit"
             >
-              Pay ${total}
+              Pay <CurrencyRupee />
+              {amount}
             </button>
           </Form>
         )}

@@ -8,9 +8,34 @@ import toast from "react-hot-toast";
 
 export default function page() {
   const state = useSelector((state) => state.cart);
+  const calculatedTotal = React.useMemo(() => {
+    let amount = 0;
+    for (const item of state) {
+      let basePrice = item.price;
+      if (item.selectedSize) {
+        for (const size of item.sizes) {
+          if (size._id === item.selectedSize) {
+            basePrice += size.extraPrice;
+          }
+        }
+      }
+      if (item.selectedAddOns) {
+        for (const addOn of item.addOns) {
+          if (item?.selectedAddOns.includes(addOn._id)) {
+            basePrice += addOn.extraPrice;
+          }
+        }
+      }
+      if (item.qty) {
+        basePrice = basePrice * item.qty;
+      }
+      amount += basePrice;
+    }
+    return amount;
+  }, [state]);
   React.useEffect(() => {
     if (typeof window != undefined) {
-      if (window?.location?.href?.includes("cancled=1")) {
+      if (window?.location.href.includes("cancled=1")) {
         toast.error("Payment failed! 😔");
       }
     }
@@ -43,7 +68,7 @@ export default function page() {
             ))}
           </div>
           <div style={{ flex: 4 }}>
-            <Checkout />
+            <Checkout amount={calculatedTotal} />
           </div>
         </div>
       </div>

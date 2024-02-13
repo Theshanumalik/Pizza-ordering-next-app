@@ -6,8 +6,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const profileContext = createContext();
 
 export const useProfile = () => {
-  const { data, error, loading } = useContext(profileContext);
-  return { data, error, loading };
+  const { data, error, loading, updateProfileData } =
+    useContext(profileContext);
+  return { data, error, loading, updateProfileData };
 };
 
 export const ProfileProvider = ({ children }) => {
@@ -37,7 +38,14 @@ export const ProfileProvider = ({ children }) => {
   }, [session.status]);
 
   return (
-    <profileContext.Provider value={{ data, error, loading }}>
+    <profileContext.Provider
+      value={{
+        data,
+        error,
+        loading,
+        updateProfileData: (data) => setData(data),
+      }}
+    >
       {children}
     </profileContext.Provider>
   );

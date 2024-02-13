@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema(
       maxLength: [20, "name can't exceeds 20 characters!"],
     },
     image: { type: String, trim: true },
+    city: String,
+    streetAddress: String,
+    phoneNumber: {
+      type: String,
+    },
     email: {
       type: String,
       lowercase: true,

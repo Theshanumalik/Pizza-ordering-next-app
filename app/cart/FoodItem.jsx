@@ -1,12 +1,31 @@
 "use client";
 import { addItem, removeItem, updateItemSize } from "@/store/cartSlice";
-import { Add, Remove } from "@mui/icons-material";
+import { Add, CurrencyRupee, Remove } from "@mui/icons-material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import { useMemo } from "react";
 
 export default function FoodItem({ data }) {
   const dispatch = useDispatch();
+  const calculatedPrice = useMemo(() => {
+    let basePrice = data.price;
+    if (data.selectedSize) {
+      for (const size of data.sizes) {
+        if (size._id === data.selectedSize) {
+          basePrice += size.extraPrice;
+        }
+      }
+    }
+    if (data.selectedAddOns) {
+      for (const addOn of data.addOns) {
+        if (data?.selectedAddOns.includes(addOn._id)) {
+          basePrice += addOn.extraPrice;
+        }
+      }
+    }
+    return basePrice;
+  }, [data.price, data.addOns, data.selectedAddOns, data.sizes]);
   return (
     <div className="flex items-center justify-between shadow-md border mb-2 p-4 rounded-lg bg-white max-[488px]:flex-col max-[488px]:text-center max-[488px]:gap-2">
       <Image
@@ -24,26 +43,11 @@ export default function FoodItem({ data }) {
           {data.description.slice(0, 50).toString()}
           {data.description.length > 50 && "..."}
         </p>
-        <div>
-          <label htmlFor="size">Size: </label>
-          <select
-            id="size"
-            className="border border-gray-400 p-1 rounded-md cursor-pointer focus:border-red-500"
-            onChange={(e) =>
-              dispatch(updateItemSize({ size: e.target.value, id: data._id }))
-            }
-            value={data?.selectedSize}
-          >
-            {data?.sizes.map((availableSize) => (
-              <option value={availableSize} key={availableSize}>
-                {availableSize}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
       <div className="flex flex-col items-center">
-        <span className="text-xl">${data.price}</span>
+        <span className="text-xl">
+          <CurrencyRupee /> {calculatedPrice}
+        </span>
         <div className="flex border border-gray-300 rounded-md">
           <button
             className="p-2 border-r border-gray-300"

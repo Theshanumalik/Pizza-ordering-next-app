@@ -1,4 +1,4 @@
-import { Person, PersonOutline, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import Link from "next/link";
 import React from "react";
 import CartIcon from "./CartIcon";

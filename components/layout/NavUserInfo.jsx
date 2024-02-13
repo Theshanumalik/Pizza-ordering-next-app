@@ -1,12 +1,12 @@
 "use client";
 import { useProfile } from "@/context/ProfileProvider";
 import { Person, PersonOutline } from "@mui/icons-material";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function NavUserInfo() {
-  const { data, loading } = useProfile();
+  const { data } = useProfile();
   const { status } = useSession();
   if (status === "unauthenticated") {
     return (
@@ -24,17 +24,25 @@ export default function NavUserInfo() {
     );
   }
   return (
-    <Link href="/profile">
-      {data.image ? (
-        <Image
-          src={data?.image}
-          width={40}
-          height={40}
-          className="rounded-full bg-gray-400 object-cover"
-        />
-      ) : (
-        <Person />
-      )}
-    </Link>
+    <>
+      <Link href="/profile">
+        {data.image ? (
+          <Image
+            src={data?.image}
+            width={40}
+            height={40}
+            className="rounded-full bg-gray-400 object-cover"
+          />
+        ) : (
+          <Person />
+        )}
+      </Link>
+      <button
+        className="bg-red-500 rounded-md p-1 text-white"
+        onClick={() => signOut()}
+      >
+        Logout
+      </button>
+    </>
   );
 }

@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AddOutlined } from "@mui/icons-material";
 import React from "react";
 
 function ActionNav() {
@@ -41,7 +42,10 @@ function ActionNav() {
                   : "bg-gray-200"
               }`}
             >
-              <Link href={"/products"}>Products</Link>
+              <Link href={"/products"} className="flex items-center gap-2 pr-3">
+                <AddOutlined />
+                Pizza
+              </Link>
             </li>
             <li
               className={`rounded-full p-1 px-4 ${

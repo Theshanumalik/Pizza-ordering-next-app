@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import Offer from "@/components/Offer";
 import StoreProvider from "@/store/StoreProvider";
 import AuthProvider from "@/context/AuthProvider";
@@ -26,6 +26,7 @@ export default function RootLayout({ children }) {
               <Offer />
               <Navbar />
               {children}
+              <div id="modal"></div>
               <Footer />
             </StoreProvider>
           </ProfileProvider>

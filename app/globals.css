@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-50;
+  @apply bg-slate-50;
 }
 .__scroll-hidden::-webkit-scrollbar {
   display: none;
@@ -21,4 +21,8 @@ body {
   to {
     opacity: 1;
   }
+}
+
+.__input {
+  @apply bg-gray-200 px-3 py-3 rounded-md resize-none outline-none focus:border-red-500 border;
 }

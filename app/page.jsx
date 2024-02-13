@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-import Cards from "@/components/Cards";
+import Cards from "@/components/menu/Cards";
 import dbConnect from "@/config/dbConnect";
 import Pizza from "@/model/Pizza";
 export default async function page() {

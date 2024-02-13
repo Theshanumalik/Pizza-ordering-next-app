@@ -13,9 +13,7 @@ export const GET = async (request) => {
     if (session.user.role !== "admin") {
       orderFilter.userId = session.user.id;
     }
-    const orders = await Order.find(orderFilter)
-      .select("-products")
-      .sort({ createdAt: -1 });
+    const orders = await Order.find(orderFilter).sort({ createdAt: -1 });
     return NextResponse.json(orders);
   } catch (error) {
     console.log(error);
