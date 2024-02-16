@@ -18,6 +18,9 @@ export const cartSlice = createSlice({
         state.push({ ...action.payload, qty: 1 });
       }
     },
+    reset: (state, action) => {
+      state = initialState;
+    },
     removeItem: (state, action) => {
       const index = state.findIndex((item) => item._id === action.payload);
       if (index >= 0) {
@@ -34,5 +37,5 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, updateItemSize } = cartSlice.actions;
+export const { addItem, removeItem, reset } = cartSlice.actions;
 export default cartSlice.reducer;

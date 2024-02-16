@@ -12,8 +12,8 @@ function OrderEntry({ data, seeDetails }) {
         {data.paymentStatus}
       </div>
       <p className="flex-1">
-        {data?.products?.length} items has {data.shippingStatus} which is
-        ordered at {new Date(data.createdAt).toLocaleString()}.
+        {data?.items?.length} items has {data.shippingStatus} which is ordered
+        at {new Date(data.createdAt).toLocaleString()}.
       </p>
       <button
         className="p-2 rounded-full border border-gray-500"

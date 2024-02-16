@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
@@ -10,12 +10,14 @@ import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import { CurrencyRupee } from "@mui/icons-material";
 import { useProfile } from "@/context/ProfileProvider";
+import { reset } from "@/store/cartSlice";
 
 export default function Checkout({ amount }) {
   const { status } = useSession();
   const { data, loading } = useProfile();
   const pathname = usePathname();
   const state = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
     phoneNumber: Yup.number("Phone number should be a Number")
       .positive()
@@ -27,7 +29,6 @@ export default function Checkout({ amount }) {
       .required("Street address cannot be empty")
       .min(10, "too short!"),
   });
-  console.log(data);
 
   if (status === "unauthenticated" || loading)
     return (
@@ -65,6 +66,7 @@ export default function Checkout({ amount }) {
               .then((res) => {
                 if (res.data?.url) {
                   resolve();
+                  dispatch(reset());
                   window.location.href = res.data.url;
                 } else {
                   reject("Payment failed, please try letter!");

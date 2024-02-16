@@ -1,5 +1,5 @@
 "use client";
-import { addItem, removeItem, updateItemSize } from "@/store/cartSlice";
+import { addItem, removeItem } from "@/store/cartSlice";
 import { Add, CurrencyRupee, Remove } from "@mui/icons-material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";

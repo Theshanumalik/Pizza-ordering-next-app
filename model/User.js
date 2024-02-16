@@ -13,9 +13,7 @@ const userSchema = new mongoose.Schema(
     image: { type: String, trim: true },
     city: String,
     streetAddress: String,
-    phoneNumber: {
-      type: String,
-    },
+    phoneNumber: String,
     email: {
       type: String,
       lowercase: true,

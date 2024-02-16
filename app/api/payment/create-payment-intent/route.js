@@ -4,6 +4,7 @@ import Order from "@/model/Order";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../(auth)/auth/[...nextauth]/route";
+import { CustomError } from "@/helper/CustomError";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 export const POST = async (request) => {
   const { products, city, phoneNumber, streetAddress } = await request.json();
@@ -12,49 +13,50 @@ export const POST = async (request) => {
     if (!session.user) {
       throw new Error("Login required!");
     }
-    if (!city || !phoneNumber || !streetAddress)
+    if (!city || !phoneNumber || !streetAddress) {
       throw new Error("Address is required!");
+    }
     let totalAmount = 0;
     let orderProducts = [];
+    let stripeItems = [];
     await dbConnect();
-    for (let i = 0; i < products.length; i++) {
-      let product = await Pizza.findById(products[i]._id);
-      if (!product || !products[i]?.qty) {
-        throw new Error("Invalid Product Found in Cart!");
+    for (const item of products) {
+      const pizza = await Pizza.findById(item._id);
+      if (!pizza) {
+        throw new CustomError("Invalid item found in cart!", 400);
       }
-      totalAmount += product?.price * products[i]?.qty;
+      let calcPrice = calculatePizzaCost(pizza, item);
+      totalAmount += calcPrice;
+      stripeItems.push({
+        quantity: item.qty,
+        price_data: {
+          currency: "INR",
+          product_data: {
+            name: pizza.name,
+          },
+          unit_amount: calcPrice * 100,
+        },
+      });
       orderProducts.push({
-        name: product.name,
-        productId: product._id,
-        price: product.price,
-        quantity: products[i]?.qty,
-        selectedSize: products[i]?.selectedSize,
+        item: item._id,
+        quantity: item?.qty,
+        selectedSize: item?.selectedSize,
+        selectedAddOns: item?.selectedAddOns,
       });
     }
     if (!totalAmount) {
       throw new Error("Something Went Wrong while validating Cart Items!");
     }
     const newOrder = await Order.create({
-      products: orderProducts,
-      userId: session.user.id,
+      items: orderProducts,
+      user: session.user.id,
       amount: totalAmount,
       shippingAddress: { streetAddress, city, phoneNumber },
     });
     const stripeSession = await stripe.checkout.sessions.create({
-      line_items: newOrder.products.map((productInfo) => {
-        return {
-          quantity: productInfo.quantity,
-          price_data: {
-            currency: "INR",
-            product_data: {
-              name: productInfo.name,
-            },
-            unit_amount: productInfo.price * 100,
-          },
-        };
-      }),
+      line_items: stripeItems,
       mode: "payment",
-      success_url: "http://localhost:3000/order?new=1",
+      success_url: `http://localhost:3000/orders?orderId=${newOrder._id}`,
       cancel_url: "http://localhost:3000/cart?cancled=1",
       metadata: { orderId: newOrder._id.toString() },
       payment_intent_data: {
@@ -77,3 +79,27 @@ export const POST = async (request) => {
     });
   }
 };
+
+function calculatePizzaCost(pizza, item) {
+  let basePrice = pizza.price;
+  if (item.selectedSize) {
+    for (const size of pizza.sizes) {
+      let sizeId = JSON.parse(JSON.stringify(size._id));
+      if (sizeId === item.selectedSize) {
+        basePrice += size.extraPrice;
+      }
+    }
+  }
+  if (item.selectedAddOns) {
+    for (const addOn of pizza.addOns) {
+      let addOnId = JSON.parse(JSON.stringify(addOn._id));
+      if (item?.selectedAddOns.includes(addOnId)) {
+        basePrice += addOn.extraPrice;
+      }
+    }
+  }
+  if (item.qty) {
+    basePrice *= item.qty;
+  }
+  return basePrice;
+}

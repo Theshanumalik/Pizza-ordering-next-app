@@ -30,6 +30,7 @@ export default function OrdersPage() {
   useState(() => {
     if (query.get("orderId")) {
       setCurrentOrderId(query.get("orderId"));
+      setClose(false);
     }
   }, []);
   if (orders.loading) {

@@ -2,20 +2,18 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    products: [
+    items: [
       {
-        productId: { type: mongoose.Types.ObjectId, ref: "pizzas" },
-        name: { type: String },
-        price: {
-          type: Number,
-          required: [true, "Product Price must be given!"],
-        },
+        item: { type: mongoose.Types.ObjectId, ref: "pizzas" },
         quantity: { type: Number, required: true },
         selectedSize: { type: String },
+        selectedAddOns: [
+          { type: mongoose.Types.ObjectId, ref: "pizzas.addOns" },
+        ],
       },
     ],
     amount: { type: Number, required: true },
-    userId: {
+    user: {
       type: mongoose.Types.ObjectId,
       ref: "users",
       required: true,
@@ -27,7 +25,7 @@ const orderSchema = new mongoose.Schema(
     },
     shippingStatus: {
       type: String,
-      enum: ["shipped", "dispatched", "failed"],
+      enum: ["deliverd", "dispatched", "failed"],
       default: "dispatched",
     },
     shippingAddress: {
