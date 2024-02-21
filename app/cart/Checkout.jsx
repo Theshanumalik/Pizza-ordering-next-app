@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { CurrencyRupee } from "@mui/icons-material";
 import { useProfile } from "@/context/ProfileProvider";
@@ -16,6 +16,7 @@ export default function Checkout({ amount }) {
   const { status } = useSession();
   const { data, loading } = useProfile();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const state = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
@@ -52,6 +53,7 @@ export default function Checkout({ amount }) {
           phoneNumber: data.phoneNumber || "",
           city: data.city || "",
           streetAddress: data.streetAddress || "",
+          couponCode: searchParams.get("coupon-code") || "",
         }}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
@@ -62,6 +64,7 @@ export default function Checkout({ amount }) {
                 streetAddress: values.streetAddress,
                 phoneNumber: values.phoneNumber,
                 city: values.city,
+                couponCode: values.couponCode,
               })
               .then((res) => {
                 if (res.data?.url) {
@@ -128,6 +131,13 @@ export default function Checkout({ amount }) {
                 ? errors.streetAddress
                 : null}
             </span>
+            <Field
+              className="px-2 py-2 rounded-md focus:outline-red-600"
+              type="tel"
+              name="couponCode"
+              id="couponCode"
+              placeholder="Enter Coupen Code"
+            />
             <button
               className="bg-red-600 text-white w-full p-3 rounded-md uppercase mt-2 hover:bg-red-500 transition-colors flex items-center justify-center"
               type="submit"

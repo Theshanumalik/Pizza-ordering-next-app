@@ -67,6 +67,7 @@ function PizzaModal({ onClose, data }) {
         data={data}
         selectedSize={selectedSize}
         selectedAddOns={selectedAddOns}
+        onClick={onClose}
       />
       <button
         className="border border-gray-400 p-2 w-3/4 rounded-md my-3 block"

@@ -9,11 +9,13 @@ export default function AddToCartButton({
   data,
   selectedSize,
   selectedAddOns,
+  onClick,
 }) {
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(addItem({ ...data, selectedAddOns, selectedSize }));
     toast.success("Pizza added to the cart!");
+    onClick();
   };
   const calculatedPrice = useMemo(() => {
     let basePrice = data.price;

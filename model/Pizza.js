@@ -11,10 +11,6 @@ const pizzaSchema = new mongoose.Schema(
       type: String,
       required: [true, "Pizza name is required"],
     },
-    slug: {
-      type: String,
-      unique: true,
-    },
     description: {
       type: String,
       required: [true, "Pizza description is required"],
@@ -43,10 +39,6 @@ const pizzaSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-pizzaSchema.pre("save", function (next) {
-  this.slug = this.name.toLowerCase().split(" ").join("-");
-  next();
-});
 const Pizza = mongoose.models.pizzas || mongoose.model("pizzas", pizzaSchema);
 
 module.exports = Pizza;

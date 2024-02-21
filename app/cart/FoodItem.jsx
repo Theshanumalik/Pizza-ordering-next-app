@@ -51,16 +51,16 @@ export default function FoodItem({ data }) {
         <div className="flex border border-gray-300 rounded-md">
           <button
             className="p-2 border-r border-gray-300"
-            onClick={() => dispatch(addItem(data))}
+            onClick={() => dispatch(removeItem(data._id))}
           >
-            <Add />
+            <Remove />
           </button>
           <span className="p-2">{data.qty}</span>
           <button
             className="p-2 border-l border-gray-300"
-            onClick={() => dispatch(removeItem(data._id))}
+            onClick={() => dispatch(addItem(data))}
           >
-            <Remove />
+            <Add />
           </button>
         </div>
       </div>

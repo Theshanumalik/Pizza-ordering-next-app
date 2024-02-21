@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import Pizza from "@/model/Pizza";
+import Offer from "@/model/Offer";
 
 const orderSchema = new mongoose.Schema(
   {
@@ -32,6 +34,10 @@ const orderSchema = new mongoose.Schema(
       city: String,
       streetAddress: String,
       phoneNumber: Number,
+    },
+    offer: {
+      type: mongoose.Types.ObjectId,
+      ref: "offers",
     },
   },
   { timestamps: true }

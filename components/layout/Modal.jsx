@@ -3,7 +3,7 @@ import { CloseOutlined } from "@mui/icons-material";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-function Modal({ onClose, children }) {
+function Modal({ onClose, children, title = "Modal Title" }) {
   const [mounted, setMounted] = useState(false);
   const modalRef = useRef(null);
   useEffect(() => {
@@ -27,13 +27,16 @@ function Modal({ onClose, children }) {
         ref={modalRef}
         className="bg-white sm:rounded-md max-w-lg w-full p-3 h-full sm:max-h-[70vh] overflow-x-hidden overflow-y-auto flex flex-col items-center relative"
       >
+        <div className="flex items-center justify-between w-full my-2">
+          <h1>{title}</h1>
+          <button
+            className="p-3 bg-black bg-opacity-20 rounded-full"
+            onClick={onClose}
+          >
+            <CloseOutlined />
+          </button>
+        </div>
         {children}
-        <button
-          className="absolute top-1 right-1 p-4 bg-black bg-opacity-20 rounded-full"
-          onClick={onClose}
-        >
-          <CloseOutlined />
-        </button>
       </div>
     </div>,
     document.getElementById("modal")

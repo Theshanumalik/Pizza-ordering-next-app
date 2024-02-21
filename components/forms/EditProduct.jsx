@@ -32,13 +32,13 @@ export default function EditProduct({ data, onSubmit }) {
   });
   return (
     <div className="px-3 my-6">
-      <div className="sm:flex sm:items-start gap-5">
+      <div className="flex sm:flex-row flex-col items-center sm:items-start gap-5">
         <EditableImage
           link={formik.values.imageUrl}
           setLink={(link) => formik.setFieldValue("image", link)}
         />
         <form
-          className="flex flex-1 flex-col gap-1"
+          className="flex flex-1 flex-col gap-1 w-full"
           onSubmit={formik.handleSubmit}
         >
           <label htmlFor="name">Name</label>

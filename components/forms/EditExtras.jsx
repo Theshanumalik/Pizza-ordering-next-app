@@ -1,12 +1,17 @@
-import { AddOutlined, DeleteOutline } from "@mui/icons-material";
+import {
+  AddOutlined,
+  DeleteOutline,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
 import React from "react";
 import toast from "react-hot-toast";
 
 export default function EditExtras({ title, extras, setExtras }) {
-  console.log("extras: ", extras);
+  const [isOpen, setIsOpen] = React.useState(false);
   const [inputs, setInputs] = React.useState({
     name: "",
-    extraPrice: 0,
+    extraPrice: "",
   });
   const handleSizeInputChange = (e) => {
     setInputs({
@@ -19,7 +24,7 @@ export default function EditExtras({ title, extras, setExtras }) {
     if (exists >= 0) return toast.error("Size exists!");
     if (inputs.name && inputs.extraPrice) {
       setExtras([...extras, inputs]);
-      setInputs({ name: "", extraPrice: 0 });
+      setInputs({ name: "", extraPrice: "" });
     }
   };
   const deleteSize = (name) => {
@@ -28,57 +33,62 @@ export default function EditExtras({ title, extras, setExtras }) {
   };
   return (
     <div className="mb-3 bg-gray-300 p-4 rounded-md w-full">
-      <h3 className="mb-3 text-lg cursor-pointer">{title}</h3>
-      {extras.map((size) => (
-        <div className="flex gap-2 mb-2 w-full" key={size.name}>
-          <input
-            className="p-2 rounded-md sm:flex-1"
-            type="text"
-            placeholder="name"
-            value={size?.name}
-            disabled
-          />
-          <input
-            className="p-2 rounded-md sm:flex-1"
-            type="text"
-            placeholder="Amount"
-            disabled
-            value={size?.extraPrice}
-            name="extraPrice"
-          />
-          <button
-            type="button"
-            className="p-2 rounded-md bg-gray-300"
-            onClick={() => deleteSize(size.name)}
-          >
-            <DeleteOutline />
-          </button>
-        </div>
-      ))}
-      <div className="sm:flex gap-2">
-        <input
-          className="p-2 rounded-md sm:flex-1"
-          type="text"
-          placeholder="Size"
-          value={inputs.name}
-          name="name"
-          onChange={handleSizeInputChange}
-        />
-        <input
-          className="p-2 rounded-md sm:flex-1"
-          type="text"
-          onChange={handleSizeInputChange}
-          placeholder="Amount"
-          name="extraPrice"
-          value={inputs.extraPrice}
-        />
-        <button
-          type="button"
-          className="p-2 rounded-md bg-gray-300"
-          onClick={addNewSize}
+      <div className="w-full justify-center flex flex-col">
+        <h3
+          className="text-lg cursor-pointer flex justify-between items-center py-2"
+          onClick={() => setIsOpen(!isOpen)}
         >
-          <AddOutlined />
-        </button>
+          {title}
+          <button className="bg-gray-400 rounded-full p-1 flex items-center justify-center">
+            {isOpen ? <ExpandLess /> : <ExpandMore />}
+          </button>
+        </h3>
+        {isOpen && (
+          <React.Fragment>
+            {extras.map((size) => (
+              <div className="grid grid-cols-3 gap-2 my-1" key={size.name}>
+                <div className="p-2 flex-1 rounded-md bg-gray-200" disabled>
+                  {size?.name}
+                </div>
+                <div className="p-2 flex-1 rounded-md bg-gray-200" disabled>
+                  {size?.extraPrice}
+                </div>
+                <button
+                  type="button"
+                  className="rounded-md bg-gray-400 p-2"
+                  onClick={() => deleteSize(size.name)}
+                >
+                  <DeleteOutline />
+                </button>
+              </div>
+            ))}
+            <div className="my-1 grid grid-cols-3 gap-2 flex-wrap">
+              <input
+                className="p-2 rounded-md"
+                type="text"
+                placeholder="Size"
+                value={inputs.name}
+                name="name"
+                onChange={handleSizeInputChange}
+              />
+              <input
+                className="p-2 rounded-md"
+                type="text"
+                onChange={handleSizeInputChange}
+                placeholder="Amount"
+                name="extraPrice"
+                value={inputs.extraPrice}
+              />
+              <button
+                type="button"
+                className="rounded-md bg-gray-400 p-2"
+                onClick={addNewSize}
+              >
+                <AddOutlined />
+              </button>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </div>
   );

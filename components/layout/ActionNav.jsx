@@ -33,6 +33,15 @@ function ActionNav() {
         >
           <Link href={"/orders"}>Orders</Link>
         </li>
+        <li
+          className={`rounded-full p-1 px-4 ${
+            pathname.includes("/offers")
+              ? "bg-red-500 text-white"
+              : "bg-gray-200"
+          }`}
+        >
+          <Link href={"/offers"}>Offers</Link>
+        </li>
         {session?.data?.user.role === "admin" && (
           <React.Fragment>
             <li

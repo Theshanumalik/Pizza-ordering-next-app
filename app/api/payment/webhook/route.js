@@ -1,5 +1,5 @@
 import Order from "@/model/Order";
-
+import Offer from "@/model/Offer";
 const stripe = require("stripe")(process.env.STRIPE_SK);
 
 export async function POST(req) {
@@ -16,9 +16,13 @@ export async function POST(req) {
   }
   if (event.type === "checkout.session.completed") {
     const orderId = event?.data?.object?.metadata?.orderId;
+    const offerId = event?.data?.object?.metadata?.offerId;
     const isPaid = event?.data?.object?.payment_status === "paid";
     if (isPaid) {
       await Order.updateOne({ _id: orderId }, { paymentStatus: "paid" });
+      if (offerId) {
+        await Offer.updateOne({ _id: offerId }, { $inc: { useCount: 1 } });
+      }
     }
   }
 

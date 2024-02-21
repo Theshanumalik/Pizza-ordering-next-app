@@ -25,13 +25,13 @@ export default function EdiProfile({ onSubmit, data }) {
     onSubmit: (values) => onSubmit(values),
   });
   return (
-    <div className="flex max-w-[725px] mx-auto my-6 gap-5">
+    <div className="flex flex-col sm:flex-row items-center sm:items-start max-w-[725px] mx-auto my-6 gap-5">
       <EditableImage
         link={formik.values.image}
         setLink={(link) => formik.setFieldValue("image", link)}
       />
       <form
-        className="flex flex-col gap-1 flex-1"
+        className="flex flex-col gap-1 flex-1 w-full"
         onSubmit={formik.handleSubmit}
       >
         <label htmlFor="name">Full Name</label>

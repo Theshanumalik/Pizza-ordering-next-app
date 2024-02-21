@@ -33,7 +33,7 @@ async function Navbar() {
           className="flex gap-3 items-center justify-end"
           style={{ flex: 3 }}
         >
-          <Link href="#">
+          <Link href="/menu">
             <Search />
           </Link>
           <CartIcon />
