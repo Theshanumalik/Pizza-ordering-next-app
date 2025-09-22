@@ -1,5 +1,5 @@
 import dbConnect from "@/config/dbConnect";
-import Pizza from "@/model/Pizza";
+import Pizza from "@/model/FoodItem";
 import Offer from "@/model/Offer";
 import Order from "@/model/Order";
 import { NextResponse } from "next/server";

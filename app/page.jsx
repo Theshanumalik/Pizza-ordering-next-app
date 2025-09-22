@@ -3,10 +3,10 @@ import React from "react";
 import Link from "next/link";
 import Cards from "@/components/menu/Cards";
 import dbConnect from "@/config/dbConnect";
-import Pizza from "@/model/Pizza";
+import FoodItem from "@/model/FoodItem";
 export default async function page() {
   await dbConnect();
-  const items = await Pizza.find({}).limit(6);
+  const items = await FoodItem.find({}).limit(6);
   return (
     <>
       <section className="p-3">

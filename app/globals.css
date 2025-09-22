@@ -26,3 +26,10 @@ body {
 .__input {
   @apply bg-gray-200 px-3 py-3 rounded-md resize-none outline-none focus:border-red-500 border;
 }
+
+.scrollbar-custom::-webkit-scrollbar {
+  @apply w-4;
+}
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-lg;
+}

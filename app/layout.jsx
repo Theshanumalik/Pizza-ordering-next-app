@@ -11,7 +11,7 @@ import { ProfileProvider } from "@/context/ProfileProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Foody - Bring food to your table",
+  title: "Foody - Bringing food to your table",
   description: "Best food delivery web app in Jaipur.",
 };
 

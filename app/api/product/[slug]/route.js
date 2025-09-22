@@ -1,7 +1,7 @@
 import { CustomError } from "@/helper/CustomError";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import Pizza from "@/model/Pizza";
+import Pizza from "@/model/FoodItem";
 import { authOptions } from "@/app/api/(auth)/auth/[...nextauth]/route";
 
 export const GET = async (request, { params }) => {

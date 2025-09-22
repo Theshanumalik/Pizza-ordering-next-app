@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
-import Pizza from "@/model/Pizza";
+import Pizza from "@/model/FoodItem";
 import Offer from "@/model/Offer";
 
 const orderSchema = new mongoose.Schema(
   {
     items: [
       {
-        item: { type: mongoose.Types.ObjectId, ref: "pizzas" },
+        item: { type: mongoose.Types.ObjectId, ref: "foodItems" },
         quantity: { type: Number, required: true },
         selectedSize: { type: String },
         selectedAddOns: [
-          { type: mongoose.Types.ObjectId, ref: "pizzas.addOns" },
+          { type: mongoose.Types.ObjectId, ref: "foodItems.addOns" },
         ],
       },
     ],

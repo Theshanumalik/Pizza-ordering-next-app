@@ -2,12 +2,34 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AddOutlined } from "@mui/icons-material";
 import React from "react";
 
 function ActionNav() {
   const pathname = usePathname();
   const session = useSession();
+
+  const menuLinks = [
+    {
+      label: "Profile",
+      href: "/profile",
+    },
+    {
+      label: "Orders",
+      href: "/orders",
+    },
+    {
+      label: "Offers",
+      href: "/offers",
+    },
+    {
+      label: "Pizza",
+      href: "/products",
+    },
+    {
+      label: "Users",
+      href: "/users",
+    },
+  ];
 
   if (session.status === "loading") {
     return <div className="text-center my-1">Loading...</div>;
@@ -15,58 +37,18 @@ function ActionNav() {
   return (
     <nav className="my-1">
       <ul className="flex items-center justify-center gap-3 flex-wrap">
-        <li
-          className={`rounded-full p-1 px-4 ${
-            pathname.includes("/profile")
-              ? "bg-red-500 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          <Link href={"/profile"}>Profile</Link>
-        </li>
-        <li
-          className={`rounded-full p-1 px-4 ${
-            pathname.includes("/orders")
-              ? "bg-red-500 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          <Link href={"/orders"}>Orders</Link>
-        </li>
-        <li
-          className={`rounded-full p-1 px-4 ${
-            pathname.includes("/offers")
-              ? "bg-red-500 text-white"
-              : "bg-gray-200"
-          }`}
-        >
-          <Link href={"/offers"}>Offers</Link>
-        </li>
-        {session?.data?.user.role === "admin" && (
-          <React.Fragment>
-            <li
-              className={`rounded-full p-1 px-4 ${
-                pathname.includes("/products")
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200"
-              }`}
-            >
-              <Link href={"/products"} className="flex items-center gap-2 pr-3">
-                <AddOutlined />
-                Pizza
-              </Link>
-            </li>
-            <li
-              className={`rounded-full p-1 px-4 ${
-                pathname.includes("/users")
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200"
-              }`}
-            >
-              <Link href={"/users"}>Users</Link>
-            </li>
-          </React.Fragment>
-        )}
+        {menuLinks.map((link) => (
+          <li
+            key={link.href}
+            className={`rounded-full p-1 px-4 ${
+              pathname.includes(link.href)
+                ? "bg-red-500 text-white"
+                : "bg-gray-200"
+            }`}
+          >
+            <Link href={link.href}>{link.label}</Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -14,7 +14,8 @@ export const GET = catchAsyncError(async (request, { params }) => {
     throw new CustomError("unauthorized user!", 400);
   }
   if (session.user.role !== "admin") {
-    orderFilter.$and = [{ _id: params.orderId }, { userId: session.user.id }];
+    orderFilter.user = session.user.id;
+    orderFilter._id = params.orderId;
   } else {
     orderFilter._id = params.orderId;
   }
@@ -22,5 +23,12 @@ export const GET = catchAsyncError(async (request, { params }) => {
     "items.item",
     "offer",
   ]);
+
+  console.log({
+    order: orders,
+    params,
+    orderQuery: JSON.stringify(orderFilter),
+  });
+
   return NextResponse.json(orders);
 });

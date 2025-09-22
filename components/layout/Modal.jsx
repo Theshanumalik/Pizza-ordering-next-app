@@ -25,7 +25,7 @@ function Modal({ onClose, children, title = "Modal Title" }) {
     <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-30 flex items-center justify-center">
       <div
         ref={modalRef}
-        className="bg-white sm:rounded-md max-w-lg w-full p-3 h-full sm:max-h-[70vh] overflow-x-hidden overflow-y-auto flex flex-col items-center relative"
+        className="bg-white sm:rounded-md max-w-lg w-full p-6 h-full sm:max-h-[70vh] overflow-x-hidden overflow-y-auto flex flex-col items-center relative scrollbar-custom"
       >
         <div className="flex items-center justify-between w-full my-2">
           <h1>{title}</h1>
